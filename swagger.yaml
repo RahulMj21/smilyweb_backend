@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: t-shirtstore API
+  description: this is the API for t-shirtstore 
+  version: 1.0.1
+
+  contact: 
+    email: rahulmondar@gmail.com
+    url: https://rahulmondal.vercel.app
+
+servers:
+  - url: "{protocol}://{url}/api/{version}"
+    description: This is the base url of our socialmedia api
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      url:
+        enum:
+          - localhost:1337
+        default: localhost:1337
+      version:
+        enum:
+          - v1
+        default: v1
+
+components:
+  
