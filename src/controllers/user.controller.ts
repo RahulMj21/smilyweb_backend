@@ -73,7 +73,7 @@ class UserController {
         to: user.email,
         html: `<p>click the given link to reset your password <br>
                   <a>
-                     ${config.get("frontendUrl")}/password/reset/${token}
+                     ${config.get("frontendUrl")}/auth/resetpassword/${token}
                   </a>
                 </p>`,
       };
