@@ -294,14 +294,31 @@ class UserController {
       const user = await User.findById(get(req, "params.id"));
       if (!user) return next(new CustomErrorHandler(404, "user not found"));
 
-      if (user.followers.find((follower) => follower.user === user._id)) {
+      if (
+        user.followers.find(
+          (follower) => follower.user.toString() === loggedInUser._id.toString()
+        )
+      ) {
         return res
           .status(200)
           .json({ success: true, message: "already following" });
       }
 
-      user.followers.push({ user: loggedInUser._id });
+      const newFollowers = [...user.followers, { user: loggedInUser._id }];
+      user.followers = newFollowers as [{ user: any }];
       user.save({ validateBeforeSave: false });
+
+      const currentUpdatedUser = await User.findByIdAndUpdate(
+        loggedInUser._id,
+        {
+          following: [...loggedInUser.following, { user: user._id }],
+        },
+        {
+          new: true,
+        }
+      );
+      if (!currentUpdatedUser)
+        return new CustomErrorHandler(500, "Oops..something went wrong");
 
       res
         .status(200)
@@ -315,21 +332,44 @@ class UserController {
       const user = await User.findById(get(req, "params.id"));
       if (!user) return next(new CustomErrorHandler(404, "user not found"));
 
-      if (!user.followers.find((follower) => follower.user === user._id)) {
+      if (
+        !user.followers.find(
+          (follower) => follower.user.toString() === loggedInUser._id.toString()
+        )
+      ) {
         return res
-          .status(400)
-          .json({ success: false, message: "you are not following the user" });
+          .status(200)
+          .json({ success: true, message: "you are not following the user" });
       }
 
-      user.followers = user.followers.filter(
-        (follower) => follower.user !== loggedInUser._id
-      ) as [{ user: any }];
+      const newFollowers = user.followers.filter(
+        (follower) => follower.user.toString() !== loggedInUser._id.toString()
+      );
+      const newFollowing = loggedInUser.following.filter(
+        (following: { user: string }) =>
+          following.user.toString() !== user._id.toString()
+      );
 
+      user.followers = newFollowers as [{ user: any }];
       user.save({ validateBeforeSave: false });
 
-      res
-        .status(200)
-        .json({ success: true, message: `following ${user.name}` });
+      const currentUpdatedUser = await User.findByIdAndUpdate(
+        loggedInUser._id,
+        {
+          following: newFollowing,
+        },
+        {
+          new: true,
+        }
+      );
+
+      if (!currentUpdatedUser)
+        return new CustomErrorHandler(500, "Oops..something went wrong");
+
+      res.status(200).json({
+        success: true,
+        message: `now you are not following ${user.name}`,
+      });
     }
   );
 }

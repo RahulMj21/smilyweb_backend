@@ -136,7 +136,7 @@ class PostController {
 
       const updatedPost = await Post.findByIdAndUpdate(post._id, data, {
         new: true,
-      });
+      }).populate("postCreator", "_id name email avatar");
       if (!updatedPost)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));
 
@@ -171,7 +171,7 @@ class PostController {
 
       const updatedPost = await Post.findByIdAndUpdate(post._id, data, {
         new: true,
-      });
+      }).populate("postCreator", "_id name email avatar");
       if (!updatedPost)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));
 
@@ -223,7 +223,7 @@ class PostController {
       };
       const updatedPost = await Post.findByIdAndUpdate(post._id, data, {
         new: true,
-      });
+      }).populate("postCreator", "_id name email avatar");
 
       if (!updatedPost)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));

@@ -153,8 +153,6 @@ class AuthController {
   logout = BigPromise(
     async (req: Request, res: Response, next: NextFunction) => {
       const user = res.locals.user;
-      console.log("user--->", user);
-      console.log(req.get("user-agent"));
       const session = await Session.findOne({
         _id: user.session,
       });
