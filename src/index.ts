@@ -4,7 +4,6 @@ import app from "./app";
 import http from "http";
 import config from "config";
 import { connectMongo, logger } from "./utils";
-import { PostDocument } from "./models/post.model";
 
 const server = http.createServer(app);
 const io = require("socket.io")(server, {

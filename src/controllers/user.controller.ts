@@ -66,23 +66,27 @@ class UserController {
           new CustomErrorHandler(403, "no user found with that email")
         );
 
+      if (user.isLoggedInWithGoogle) {
+        return next(new CustomErrorHandler(400, "bad request"));
+      }
       const token = user.getForgotPasswordToken();
       if (!token)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));
+      const uri = `${config.get<string>(
+        "frontendUrl"
+      )}/auth/resetpassword/${token}`;
       const data = {
         to: user.email,
         html: `<p>click the given link to reset your password <br>
-                  <a>
-                     ${config.get("frontendUrl")}/auth/resetpassword/${token}
+                  <a href=${uri}>
+                     ${uri}
                   </a>
                 </p>`,
       };
 
-      const mailSendStatus = await sendMail(data);
-      if (!mailSendStatus)
+      const info = await sendMail(data);
+      if (!info)
         return next(new CustomErrorHandler(500, "Oops.. mail cannot be sent"));
-
-      console.log(mailSendStatus);
 
       res.status(200).json({
         success: true,
@@ -156,7 +160,8 @@ class UserController {
 
   updateUserAvatar = BigPromise(
     async (req: Request, res: Response, next: NextFunction) => {
-      const avatar = get(req, "files.avatar") || get(req, "body.avatar");
+      const avatar =
+        get(req, "files.avatar") || get(req, "body.avatar") || null;
       if (!avatar)
         return next(
           new CustomErrorHandler(
@@ -184,7 +189,6 @@ class UserController {
         width: 200,
         crop: "scale",
       });
-
       if (!result)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));
 
@@ -345,9 +349,10 @@ class UserController {
       const newFollowers = user.followers.filter(
         (follower) => follower.user.toString() !== loggedInUser._id.toString()
       );
-      const newFollowing = loggedInUser.following.filter(
+
+      const newFollowings = loggedInUser.following.filter(
         (following: { user: string }) =>
-          following.user.toString() !== user._id.toString()
+          following.user.toString() !== user.toString()
       );
 
       user.followers = newFollowers as [{ user: any }];
@@ -356,7 +361,7 @@ class UserController {
       const currentUpdatedUser = await User.findByIdAndUpdate(
         loggedInUser._id,
         {
-          following: newFollowing,
+          following: newFollowings,
         },
         {
           new: true,

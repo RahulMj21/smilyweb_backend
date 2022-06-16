@@ -53,10 +53,9 @@ class PostController {
 
   getAllPosts = BigPromise(
     async (req: Request, res: Response, next: NextFunction) => {
-      const posts = await Post.find().populate(
-        "postCreator",
-        "name avatar email _id"
-      );
+      const posts = await Post.find()
+        .populate("postCreator", "name avatar _id")
+        .populate("comments.user", "_id name");
       if (!posts)
         return next(
           new CustomErrorHandler(404, "currently don't have any post to see")
@@ -73,10 +72,9 @@ class PostController {
       const id = get(req, "params.id");
       if (!id) return next(new CustomErrorHandler(400, "post id is required"));
 
-      const post = await Post.findById(id).populate(
-        "postCreator",
-        "name avatar email _id"
-      );
+      const post = await Post.findById(id)
+        .populate("postCreator", "name avatar _id")
+        .populate("comments.user", "_id name");
       if (!post)
         return next(
           new CustomErrorHandler(404, "currently don't have any post to see")
@@ -216,14 +214,15 @@ class PostController {
           ...post.comments,
           {
             user: user._id,
-            name: user.name,
             comment,
           },
         ],
       };
       const updatedPost = await Post.findByIdAndUpdate(post._id, data, {
         new: true,
-      }).populate("postCreator", "_id name email avatar");
+      })
+        .populate("postCreator", "name avatar _id")
+        .populate("comments.user", "_id name");
 
       if (!updatedPost)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));

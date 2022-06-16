@@ -26,7 +26,7 @@ router
     UserController.updatePassword
   );
 
-router.route("/user/password/forgot").get(UserController.forgotPassword);
+router.route("/user/password/forgot").post(UserController.forgotPassword);
 
 router
   .route("/user/password/reset/:token")

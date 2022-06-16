@@ -12,19 +12,20 @@ export default async function sendMail({
   try {
     const transporter = nodemailer.createTransport({
       auth: {
-        user: config.get("mailUser"),
-        pass: config.get("mailPass"),
+        user: config.get<string>("mailUser"),
+        pass: config.get<string>("mailPass"),
       },
+      service: "gmail",
       secure: false,
-      port: config.get("mailPort"),
-      host: config.get("mailHost"),
+      port: config.get<number>("mailPort"),
+      host: config.get<string>("mailHost"),
     });
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: "smilyweb", // sender address
-      to: to, // list of receivers
+      to, // list of receivers
       subject: "click on the link to reset your password", // Subject line
-      html: html, // html body
+      html, // html body
     });
     return info;
   } catch (error: any) {

@@ -61,7 +61,6 @@ const postSchema = new Schema(
     comments: [
       {
         user: { type: Schema.Types.ObjectId, ref: "User" },
-        name: String,
         comment: String,
         time: { type: Date, default: Date.now },
       },
