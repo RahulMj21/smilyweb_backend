@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node ./build/index.js"
+    "start": "node ./build/src/index.js"
   },
   "dependencies": {
     "@types/socket.io": "^3.0.2",
