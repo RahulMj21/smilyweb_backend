@@ -29,6 +29,7 @@
     "pino": "^7.6.2",
     "socket.io": "^4.4.1",
     "swagger-ui-express": "^4.3.0",
+    "ts-node": "^10.8.1",
     "yamljs": "^0.3.0",
     "zod": "^3.11.6"
   },
