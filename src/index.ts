@@ -26,7 +26,7 @@ io.on("connection", (socket: any) => {
   });
 });
 
-const port = config.get<string>("port");
+const port = config.get<string>("port") || 4000;
 
 server.listen(port, () => {
   logger.info(`server is running on http://localhost:${port}`);

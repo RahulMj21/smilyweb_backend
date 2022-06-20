@@ -1,7 +1,7 @@
 export default {
   port: process.env.PORT,
-  dbUri: process.env.DB_URL,
-  frontendUrl: process.env.FRONTEND_URL,
+  dbUri: process.env.DB_URL as string,
+  frontendUrl: process.env.FRONTEND_URL as string,
   logLevel: "info",
   accessTokenTl: "1h",
   refreshTokenTl: "1y",
