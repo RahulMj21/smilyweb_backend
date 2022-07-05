@@ -1,11 +1,11 @@
 import { Response } from "express";
-import config from "config";
+import ENV from "../../config";
 import { JWT } from "../utils";
 
-const accessTokenPrivateKey = config.get<string>("accessTokenPrivateKey");
-const refreshTokenPrivateKey = config.get<string>("refreshTokenPrivateKey");
-const accessTokenTl = config.get<string>("accessTokenTl");
-const refreshTokenTl = config.get<string>("refreshTokenTl");
+const accessTokenPrivateKey = ENV.accessTokenPrivateKey as string;
+const refreshTokenPrivateKey = ENV.refreshTokenPrivateKey as string;
+const accessTokenTl = ENV.accessTokenTl;
+const refreshTokenTl = ENV.refreshTokenTl;
 
 export default function createTokenAndSetCookie(
   user: Object,

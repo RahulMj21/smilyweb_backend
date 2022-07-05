@@ -1,6 +1,6 @@
-import { PostDocument, PostInput } from "../models/post.model";
-import { DocumentDefinition, FilterQuery } from "mongoose";
+import { DocumentDefinition } from "mongoose";
 import { Post } from "../models";
+import { PostInput } from "../models/post.model";
 
 export async function createPost(input: DocumentDefinition<PostInput>) {
   try {

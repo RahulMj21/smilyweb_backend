@@ -8,7 +8,7 @@ import {
   updatePassword,
 } from "../services/user.service";
 import { UpdatePasswordInput } from "../schema/updatePassword.schema";
-import config from "config";
+import ENV from "../../config";
 import sendMail from "../utils/sendMail";
 import { ResetPasswordInput } from "../schema/resetPassword.schema";
 import { User } from "../models";
@@ -72,9 +72,7 @@ class UserController {
       const token = user.getForgotPasswordToken();
       if (!token)
         return next(new CustomErrorHandler(500, "Oops..something went wrong"));
-      const uri = `${config.get<string>(
-        "frontendUrl"
-      )}/auth/resetpassword/${token}`;
+      const uri = `${ENV.frontendUrl}/auth/resetpassword/${token}`;
       const data = {
         to: user.email,
         html: `<p>click the given link to reset your password <br>
@@ -107,7 +105,7 @@ class UserController {
       const [expiry, randomString] = token.split(".bR");
 
       const forgotPasswordToken = crypto
-        .createHmac("sha256", config.get<string>("forgotPasswordTokenSecret"))
+        .createHmac("sha256", ENV.forgotPasswordTokenSecret)
         .update(`${randomString}.${expiry}`)
         .digest("hex");
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "config";
+import ENV from "../../config";
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import qs from "qs";
 import { User } from "../models";
@@ -20,9 +20,9 @@ export async function getGoogleUserData(
   const url = "https://oauth2.googleapis.com/token";
   const values = {
     code,
-    client_id: config.get<string>("googleClientId"),
-    client_secret: config.get<string>("googleClientSecret"),
-    redirect_uri: config.get("googleRedirectUri"),
+    client_id: ENV.googleClientId,
+    client_secret: ENV.googleClientSecret,
+    redirect_uri: ENV.googleRedirectUri,
     grant_type: "authorization_code",
   };
   try {

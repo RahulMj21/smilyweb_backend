@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { get } from "lodash";
 import { Session, User } from "../models";
-import config from "config";
+import ENV from "../../config";
 class JWT {
   signJwt = (
     payload: Object,
@@ -48,7 +48,7 @@ class JWT {
       if (!session) return false;
 
       const secret = Buffer.from(
-        config.get<string>("accessTokenPrivateKey"),
+        ENV.accessTokenPrivateKey as string,
         "base64"
       ).toString("ascii");
       const accessToken = jwt.sign(
@@ -59,7 +59,7 @@ class JWT {
         secret,
         {
           algorithm: "RS256",
-          expiresIn: config.get<string>("accessTokenTl"),
+          expiresIn: ENV.accessTokenTl,
         }
       );
 

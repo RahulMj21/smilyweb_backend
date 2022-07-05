@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import config from "config";
+import ENV from "../../config";
 
 export interface UserInput {
   name: string;
@@ -115,7 +115,7 @@ userSchema.methods.getForgotPasswordToken = function () {
   const data = `${randomString}.${expiry}`;
 
   const hash = crypto
-    .createHmac("sha256", config.get("forgotPasswordTokenSecret"))
+    .createHmac("sha256", ENV.forgotPasswordTokenSecret as string)
     .update(data)
     .digest("hex");
   user.forgotPasswordToken = hash;

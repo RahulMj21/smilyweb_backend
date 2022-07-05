@@ -1,4 +1,4 @@
-import config from "config";
+import ENV from "../../config";
 import nodemailer from "nodemailer";
 import { logger } from ".";
 
@@ -12,13 +12,13 @@ export default async function sendMail({
   try {
     const transporter = nodemailer.createTransport({
       auth: {
-        user: config.get<string>("mailUser"),
-        pass: config.get<string>("mailPass"),
+        user: ENV.mailUser,
+        pass: ENV.mailPass,
       },
       service: "gmail",
       secure: false,
-      port: config.get<number>("mailPort"),
-      host: config.get<string>("mailHost"),
+      port: ENV.mailPort,
+      host: ENV.mailHost,
     });
     // send mail with defined transport object
     let info = await transporter.sendMail({

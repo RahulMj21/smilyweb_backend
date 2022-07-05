@@ -4,7 +4,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
 import fileUpload from "express-fileupload";
-import config from "config";
+import ENV from "../config";
 import cors from "cors";
 import { authRoute, userRoute, postRoute, testRoute } from "./routes";
 import { errorHandler } from "./middlewares";
@@ -21,7 +21,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(
   cors({
     credentials: true,
-    origin: config.get<string>("frontendUrl"),
+    origin: ENV.frontendUrl,
   })
 );
 app.use(cookieParser());
@@ -36,9 +36,9 @@ app.use(
 
 // cloudinary config
 cloudinary.v2.config({
-  cloud_name: config.get<string>("cloudName"),
-  api_key: config.get<string>("apiKey"),
-  api_secret: config.get<string>("apiSecret"),
+  cloud_name: ENV.cloudName,
+  api_key: ENV.apiKey,
+  api_secret: ENV.apiSecret,
 });
 
 // using routes

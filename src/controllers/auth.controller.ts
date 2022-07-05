@@ -6,7 +6,7 @@ import {
 } from "../utils";
 import { get, omit } from "lodash";
 import { CreateUserInput } from "../schema/user.schema";
-import config from "config";
+import ENV from "../../config";
 import {
   createUser,
   findUser,
@@ -146,7 +146,7 @@ class AuthController {
       createTokenAndSetCookie(user, get(session, "_id"), res);
 
       // send response
-      res.status(200).redirect(config.get("frontendUrl"));
+      res.status(200).redirect(ENV.frontendUrl);
     }
   );
 

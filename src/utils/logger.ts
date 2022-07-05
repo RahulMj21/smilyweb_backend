@@ -1,8 +1,8 @@
 import pino from "pino";
 import dayjs from "dayjs";
-import config from "config";
+import ENV from "../../config";
 
-const level = config.get<string>("logLevel");
+const level = ENV.logLevel;
 
 const logger = pino({
   transport: {

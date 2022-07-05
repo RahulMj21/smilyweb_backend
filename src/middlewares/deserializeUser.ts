@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { get } from "lodash";
 import { CustomErrorHandler, JWT } from "../utils";
-import config from "config";
+import ENV from "../../config";
 
 export default async function deserializeUser(
   req: Request,
@@ -24,7 +24,7 @@ export default async function deserializeUser(
   if (accessToken) {
     const { decoded, expired } = JWT.verifyJwt(
       accessToken,
-      config.get<string>("accessTokenPublicKey")
+      ENV.accessTokenPublicKey
     );
     if (decoded && !expired) {
       res.locals.user = decoded;
@@ -33,7 +33,7 @@ export default async function deserializeUser(
   } else if (refreshToken) {
     const newAccessToken = await JWT.reIssueAccessToken(
       refreshToken,
-      config.get("refreshTokenPublicKey")
+      ENV.refreshTokenPublicKey
     );
     if (!newAccessToken)
       return next(new CustomErrorHandler(401, "unauthorized user"));
@@ -48,7 +48,7 @@ export default async function deserializeUser(
     });
     const { decoded, expired } = JWT.verifyJwt(
       newAccessToken,
-      config.get("accessTokenPublicKey")
+      ENV.accessTokenPublicKey
     );
     res.locals.user = decoded;
     return next();

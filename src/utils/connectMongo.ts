@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import config from "config";
+import ENV from "../../config";
 import { logger } from ".";
 
-const dbUri = config.get<string>("dbUri");
+const dbUri = ENV.dbUri;
 
 const connectMongo = async () => {
   try {
